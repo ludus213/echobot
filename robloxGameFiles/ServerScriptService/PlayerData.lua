@@ -250,32 +250,22 @@ local function AddDaysSurvived(player, days)
 end
 
 local function UpdateOrigin(player, origin)
-	print("[PlayerData] UpdateOrigin called for", player and player.Name, "origin:", origin)
 	local profile = Profiles[player]
-	print("[PlayerData] Profile for UpdateOrigin:", profile)
 	if profile then
 		profile.Data.origin = origin
 		if player:FindFirstChild("PlayerData") and player.PlayerData:FindFirstChild("origin") then
 			player.PlayerData.origin.Value = origin
 		end
-		print("[PlayerData] Origin updated for", player.Name)
-	else
-		print("[PlayerData] No profile found for", player.Name, "in UpdateOrigin")
 	end
 end
 
 local function UpdateVestige(player, vestige)
-	print("[PlayerData] UpdateVestige called for", player and player.Name, "vestige:", vestige)
 	local profile = Profiles[player]
-	print("[PlayerData] Profile for UpdateVestige:", profile)
 	if profile then
 		profile.Data.vestige = vestige
 		if player:FindFirstChild("PlayerData") and player.PlayerData:FindFirstChild("vestige") then
 			player.PlayerData.vestige.Value = vestige
 		end
-		print("[PlayerData] Vestige updated for", player.Name)
-	else
-		print("[PlayerData] No profile found for", player.Name, "in UpdateVestige")
 	end
 end
 
@@ -443,11 +433,8 @@ local function setInn(player, inn)
 end
 
 local function Wipe(player, gender)
-	print("[PlayerData] Wipe called for", player and player.Name, "gender:", gender)
 	local profile = Profiles[player]
-	print("[PlayerData] Profile for Wipe:", profile)
 	if profile then
-		-- clear data
 		profile.Data.name = ""
 		profile.Data.LatentEcho = 0
 		profile.Data.vestige = 5
@@ -531,12 +518,9 @@ local function Wipe(player, gender)
 				player.PlayerData.health.Value = 100
 			end
 		end
-		print("[PlayerData] Wipe logic executed for", player.Name)
 		UpdateExternalData(player)
 		profile:Save()
 		player:LoadCharacter()
-	else
-		print("[PlayerData] No profile found for", player.Name, "in Wipe")
 	end
 end
 
@@ -581,21 +565,17 @@ local function UpdateSlotData(player, slotData)
 	if profile then
 		local HttpService = game:GetService("HttpService")
 		local sanitizedData = sanitizeSlotData(slotData)
-		
 		local success, slotDataString = pcall(function()
 			return HttpService:JSONEncode(sanitizedData)
 		end)
-		
 		if success then
 			profile.Data.SlotData = slotDataString
-			
 			if player:FindFirstChild("PlayerData") and player.PlayerData:FindFirstChild("SlotData") then
 				player.PlayerData.SlotData.Value = slotDataString
 			end
 		else
 			warn("Failed to encode SlotData for player " .. player.Name .. ": " .. tostring(slotDataString))
 			profile.Data.SlotData = "{}"
-			
 			if player:FindFirstChild("PlayerData") and player.PlayerData:FindFirstChild("SlotData") then
 				player.PlayerData.SlotData.Value = "{}"
 			end
@@ -630,42 +610,36 @@ function Local.OnStart()
 	for _, player in pairs(Players:GetChildren()) do
 		task.spawn(Local.LoadProfile, player)
 	end
-
 	Players.PlayerAdded:Connect(Local.LoadProfile)
 	Players.PlayerRemoving:Connect(Local.RemoveProfile)
 end
 
 function Local.LoadProfile(player: Player)
-	local profile = PlayerStore:StartSessionAsync(`{player.UserId}`, {
+	local profile = PlayerStore:StartSessionAsync(`${player.UserId}`, {
 		Cancel = function()
 			return player.Parent ~= Players
 		end,
 	})
-
 	if profile == nil then
 		return player:Kick("Profile load faild. Please rejoin.")
 	end
-
 	profile:AddUserId(player.UserId)
 	profile:Reconcile()
-
 	if not profile.Data.Armor then
 		local defaults = { "LegacyBlackOutfit", "LegacyRedOutfit", "LegacyGreenOutfit", "LegacyPurpleOutfit" }
 		profile.Data.Armor = defaults[math.random(1, #defaults)]
 	end
-
 	profile.OnSessionEnd:Connect(function()
 		Profiles[player] = nil
 		player:Kick("Profile session ended. Please rejoin.")
 	end)
-
 	local isInGame = player.Parent == Players
 	if isInGame then
 		Profiles[player] = profile
 		coroutine.wrap(CreatExternalData)(player)
-
-		--local CharacterSetupCoordinator = require(script.Parent.Modules.CharacterSetupCoordinator)
-		--CharacterSetupCoordinator.SetupPlayer(player)
+		if profile.Data.banned then
+			player:Kick("Banned")
+		end
 	else
 		profile:EndSession()
 	end
@@ -688,7 +662,6 @@ function Shared.GetData(player: Player): PlayerDataTemplate.PlayerData?
 	if not profile then
 		return
 	end
-
 	return profile.Data
 end
 
@@ -719,7 +692,6 @@ Shared.AddMinutesSurvived = AddMinutesSurvived
 Shared.SetMinutesSurvived = SetMinutesSurvived
 Shared.AddDaysSurvived = AddDaysSurvived
 Shared.getData = getData
-
 
 function Shared.AllowPositionSave(player)
 	canSavePosition[player] = true

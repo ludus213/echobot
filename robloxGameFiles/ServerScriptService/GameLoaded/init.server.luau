@@ -252,7 +252,6 @@ Players.PlayerAdded:Connect(function(player: Player)
 					local attackerCharacter = game.Workspace.Living:WaitForChild(attacker)
 					if attackerCharacter then
 						local attackerinstance = attackerCharacter:Clone()
-						print(attackerinstance)
 						local gui = script.KillScreen:Clone()
 						local attackerdata = PlayerData.GetData(
 							Players:GetPlayerFromCharacter(game.Workspace.Living:FindFirstChild(attacker))
@@ -263,12 +262,22 @@ Players.PlayerAdded:Connect(function(player: Player)
 						gui.ParentFrame.PlayerLabel.Text = attacker
 						gui.ParentFrame.DeathInstance.Text = tostring(Players:GetUserIdFromNameAsync(attacker))
 						gui.ParentFrame.Timestamp.Text = os.date("{%I:%M %p, %m/%d/%y}")
-					else
-						print("no attacker character found")
 					end
-				else
-					print("no attacker")
 				end
+				local HttpService = game:GetService("HttpService")
+				local instanceId = HttpService:GenerateGUID(false)
+				local pos = character:FindFirstChild("Torso") and character.Torso.Position or Vector3.new()
+				local position = { x = pos.X, y = pos.Y, z = pos.Z }
+				local body = {
+					instance_id = instanceId,
+					attacker = attacker,
+					victim = player.Name,
+					cause = "combat",
+					position = position,
+					time = os.date("!%Y-%m-%dT%H:%M:%SZ")
+				}
+				local url = "http://127.0.0.1:8000/death"
+				HttpService:RequestAsync({ Url = url, Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService:JSONEncode(body) })
 			end
 		end)
 	end)

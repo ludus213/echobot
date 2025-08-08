@@ -20,7 +20,9 @@ Shared.DEFAULT_PLAYER_DATA = {
 	Inn = nil,
 	MinutesSurvived = 0,
 	DaysSurvived = 0,
-	Stomach = 100
+	Stomach = 100,
+	strikes = 0,
+	banned = false
 }
 
 export type PlayerData = typeof(Shared.DEFAULT_PLAYER_DATA)

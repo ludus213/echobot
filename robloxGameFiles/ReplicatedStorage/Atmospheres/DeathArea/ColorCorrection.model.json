@@ -1,0 +1,9 @@
+{
+  "name": null,
+  "className": "ColorCorrectionEffect",
+  "properties": {
+    "Brightness": 0.05000000074505806,
+    "Contrast": 0.20000000298023224,
+    "Saturation": 0.15000000596046448
+  }
+}

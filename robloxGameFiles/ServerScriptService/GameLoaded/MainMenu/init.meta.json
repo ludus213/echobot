@@ -1,0 +1,8 @@
+{
+  "ignoreUnknownInstances": true,
+  "properties": {
+    "ScreenInsets": "DeviceSafeInsets",
+    "ZIndexBehavior": "Sibling"
+  },
+  "className": "ScreenGui"
+}

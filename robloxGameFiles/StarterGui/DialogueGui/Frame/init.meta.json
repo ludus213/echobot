@@ -1,0 +1,54 @@
+{
+  "ignoreUnknownInstances": true,
+  "properties": {
+    "AnchorPoint": [
+      0.5,
+      0.5
+    ],
+    "BackgroundColor3": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "BackgroundTransparency": 1.0,
+    "BorderColor3": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "BorderSizePixel": 0.0,
+    "ImageColor3": [
+      0.0,
+      0.05882352963089943,
+      0.0
+    ],
+    "ImageContent": "rbxassetid://89073714328233",
+    "ImageTransparency": 0.2800000011920929,
+    "Position": {
+      "UDim2": [
+        [
+          0.5,
+          0
+        ],
+        [
+          0.73935646,
+          0
+        ]
+      ]
+    },
+    "Size": {
+      "UDim2": [
+        [
+          0.3,
+          0
+        ],
+        [
+          0.2,
+          0
+        ]
+      ]
+    },
+    "Visible": false
+  },
+  "className": "ImageLabel"
+}

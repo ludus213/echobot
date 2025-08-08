@@ -250,32 +250,22 @@ local function AddDaysSurvived(player, days)
 end
 
 local function UpdateOrigin(player, origin)
-	print("[PlayerData] UpdateOrigin called for", player and player.Name, "origin:", origin)
 	local profile = Profiles[player]
-	print("[PlayerData] Profile for UpdateOrigin:", profile)
 	if profile then
 		profile.Data.origin = origin
 		if player:FindFirstChild("PlayerData") and player.PlayerData:FindFirstChild("origin") then
 			player.PlayerData.origin.Value = origin
 		end
-		print("[PlayerData] Origin updated for", player.Name)
-	else
-		print("[PlayerData] No profile found for", player.Name, "in UpdateOrigin")
 	end
 end
 
 local function UpdateVestige(player, vestige)
-	print("[PlayerData] UpdateVestige called for", player and player.Name, "vestige:", vestige)
 	local profile = Profiles[player]
-	print("[PlayerData] Profile for UpdateVestige:", profile)
 	if profile then
 		profile.Data.vestige = vestige
 		if player:FindFirstChild("PlayerData") and player.PlayerData:FindFirstChild("vestige") then
 			player.PlayerData.vestige.Value = vestige
 		end
-		print("[PlayerData] Vestige updated for", player.Name)
-	else
-		print("[PlayerData] No profile found for", player.Name, "in UpdateVestige")
 	end
 end
 
@@ -531,12 +521,9 @@ local function Wipe(player, gender)
 				player.PlayerData.health.Value = 100
 			end
 		end
-		print("[PlayerData] Wipe logic executed for", player.Name)
 		UpdateExternalData(player)
 		profile:Save()
 		player:LoadCharacter()
-	else
-		print("[PlayerData] No profile found for", player.Name, "in Wipe")
 	end
 end
 
